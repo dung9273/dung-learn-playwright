@@ -67,3 +67,20 @@ test('location child elements', async ({page})=>{
 await page.locator('nb-card').locator('nb-radio-group').locator(':text-is("Option 1")').click()
 await page.locator('nb-card  nb-radio-group :text-is("Option 2")').click()
 })
+
+
+test('location parent elements', async ({page})=> {
+  await page.locator('nb-card',{hasText: 'Using the Grid'}).getByRole('button').click()
+  await page.locator('nb-card').filter({hasText: 'Using the Grid'}).getByRole('button').click()
+  await page.locator('nb-card').filter({has: page.locator('nb-checkbox')}).filter({hasText:'Sign in'}).getByLabel('Email').fill('test.com.vn')
+})
+
+
+test('reuseble elements', async ({page})=> {
+  const basicFormSection = page.locator('nb-card',{hasText:'Basic form'})
+  await basicFormSection.getByLabel('Email').fill('tesssssssst.com')
+  await basicFormSection.getByLabel('Password').fill('tesst123')
+  await basicFormSection.locator('nb-checkbox').click()
+  await basicFormSection.getByRole('button').click()
+
+})
