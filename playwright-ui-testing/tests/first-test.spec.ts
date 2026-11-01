@@ -1,4 +1,4 @@
-import { test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.beforeEach(async ({ page }) => {
     await page.goto("https://playground.bondaracademy.com/")
@@ -83,4 +83,56 @@ test('reuseble elements', async ({page})=> {
   await basicFormSection.locator('nb-checkbox').click()
   await basicFormSection.getByRole('button').click()
 
+})
+
+
+test('Extracting values', async ({page})=> {
+  // extract text
+  const basicFormSection = page.locator('nb-card',{hasText:'Basic form'})
+  const submitButtonText = await basicFormSection.getByRole('button').textContent()
+  
+  expect(submitButtonText).toEqual('Submit')
+
+
+  // extract multiple text
+  const allRadioButton = await page.locator ('nb-radio').allTextContents()
+  console.log(allRadioButton)
+
+  // extract input field 
+  const emailField = basicFormSection.getByRole('textbox', {name: 'Email'})
+  await emailField.fill('dunghan2test')
+  const emailFieldValue= await emailField.inputValue()
+  console.log(emailFieldValue)
+
+  // extract attribute
+  const emmailPlaceholder = await emailField.getAttribute('placeholder')
+  console.log(emmailPlaceholder)
+})
+
+
+
+test('Assertions', async ({page})=> {
+
+  const basicFormSectionButton = page.locator('nb-card',{hasText:'Basic form'}).getByRole('button')
+  const value = 5
+  expect (value).toEqual(5)
+
+  const submitButtonText = await basicFormSectionButton.textContent()
+  expect(submitButtonText).toEqual('Submit')
+
+  //locator assertion
+  await expect(basicFormSectionButton).toHaveText('Submit')
+
+})
+
+
+
+test('generated test', async({page}) => {
+  await page.getByRole('textbox', { name: 'Email address' }).fill('dung@test')
+
+  await page.locator('#exampleInputPassword1').click();
+  await page.locator('#exampleInputPassword1').fill('newpasswork');
+  await page.locator('.form-group > .status-basic > .label > .custom-checkbox').click();
+  await page.getByRole('checkbox', { name: 'Check me out' }).check();
+  await page.locator('nb-card').filter({ hasText: 'Basic formEmail' }).getByRole('button').click();
 })
