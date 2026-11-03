@@ -13,3 +13,32 @@ test('checkboxes', async ({page})=> {
     }
 
 })
+
+
+
+test('lists and dropdowns', async ({page})=> {
+    await page.goto('https://playground.bondaracademy.com/');
+    await page.getByText('Modal & Overlays').click()
+    await page.getByText('Toastr').click()
+
+    //standard drop-down
+    await page.locator('.form-group',{hasText:'Toast type'}).getByRole('combobox').selectOption('info')
+    await expect(page.getByRole('combobox')).toHaveValue('info')
+
+    // dropdown
+    await page.locator('.form-group',{hasText:'Position:'}).locator('nb-select').click()
+    //option1
+   // await page.getByRole('list').getByText('bottom-end').click()
+    //option2
+    await page.locator('nb-option', {hasText: 'bottom-end'}).click()
+    await expect(page.locator('.form-group',{hasText:'Position:'}).locator('nb-select')).toHaveText('bottom-end')
+})
+
+
+test('tooltip', async ({page})=> {
+    await page.goto('https://playground.bondaracademy.com/');
+    await page.getByText('Modal & Overlays').click()
+    await page.getByText('Tooltip').click()
+    await page.getByRole('button', {name: 'RIGHT'}).hover()
+    await expect(page.getByRole('tooltip')).toHaveText('This is a tooltip')
+})
