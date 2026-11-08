@@ -64,4 +64,14 @@ test('web table', async ({page})=> {
     await page.getByText('Tables & Data').click()
     await page.getByText('Smart Table').click()
 
+
+    // how to select row by any visible text
+    const tableRowByEmail = page.getByRole('row', {name: 'twitter@outlook.com'})
+    await tableRowByEmail.locator('.nb-edit').click()
+    await tableRowByEmail.getByPlaceholder('Age').fill('35')
+    await tableRowByEmail.locator('.nb-checkmark').click()
+    await expect(tableRowByEmail.locator('td').last()).toHaveText('35')
+
 })
+
+
