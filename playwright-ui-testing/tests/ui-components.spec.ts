@@ -72,6 +72,21 @@ test('web table', async ({page})=> {
     await tableRowByEmail.locator('.nb-checkmark').click()
     await expect(tableRowByEmail.locator('td').last()).toHaveText('35')
 
+    // get row by a spicific column value
+    const tableRowbyID = page.getByRole('row').filter({has: page.getByRole('cell').nth(1).getByText('10')})
+    await tableRowbyID.locator('.nb-edit').click()
+    await page.locator('tbody').getByPlaceholder('E-mail').fill('jun@test.com')
+    await page.locator('tbody').locator('.nb-checkmark').click()
+    await expect(tableRowbyID.locator('td').nth(5)).toHaveText('jun@test.com')
+
 })
 
+test('date picker', async ({page})=> {
+    await page.goto('https://playground.bondaracademy.com/')
+    await page.getByText('Forms').click()
+    await page.getByText('Datepicker').click()
 
+    const CalendarInputField = page.getByPlaceholder('Form Picker')
+    await CalendarInputField.click()
+    await page.locator('.day-cell:not(.bounding-month').getByText('15').click()
+})
