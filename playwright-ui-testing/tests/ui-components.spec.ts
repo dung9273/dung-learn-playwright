@@ -86,7 +86,49 @@ test('date picker', async ({page})=> {
     await page.getByText('Forms').click()
     await page.getByText('Datepicker').click()
 
+    const date = new Date()
+    date.setDate(date.getDate()+5)
+
     const CalendarInputField = page.getByPlaceholder('Form Picker')
     await CalendarInputField.click()
-    await page.locator('.day-cell:not(.bounding-month').getByText('15').click()
+    await page.locator('.day-cell:not(.bounding-month').getByText('15', {exact: true}).click()
+    await expect (CalendarInputField).toHaveValue('Jul 2,2026')
+})
+
+
+test('slider', async ({page})=> {
+    await page.goto('https://playground.bondaracademy.com/')
+    await page.getByText('IoT Dashboard').click()
+    const tempGauge = page.locator('[ tabtitle="Temperature"] ngx-temperature-dragger circle')
+    await tempGauge.evaluate(element => {
+        element.setAttribute('cx','232.630')
+        element.setAttribute('cy','232.630')
+    })
+    await tempGauge.click()
+
+})
+
+
+test('ifram', async ({page})=> {
+    await page.goto('https://playground.bondaracademy.com/');
+    await page.getByText('Modal & Overlays').click()
+    await page.getByText('Dialog').click()
+    const IframeLocator = page.frameLocator('[data-cy="esc-close-iframe]')
+    await IframeLocator.getByRole('button',{name: 'Open Dialog with esc close'}).click()
+})
+
+
+test('Drag & Drop', async ({page})=> {
+    await page.goto('https://playground.bondaracademy.com/');
+    await page.getByText('Extra Components').click()
+    await page.getByText('Drag & Drop').click()
+    // 1
+    await page.getByText(' Clean my room ').dragTo(page.locator('#drop-list'))
+
+    // 2
+    await page.getByText(' Clean my room ').hover()
+    await page.mouse.down()
+    await page.locator('#drop-list').hover
+    await page.mouse.up()
+
 })
